@@ -1,16 +1,28 @@
 {
   "name": "server",
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "engines": {
+    "node": "18.13.0"
+  },
+  "type": "module",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js",
+    "server": "DEBUG=issue-tracker-backend-v1:* npm run start"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
-    "express": "~4.16.1",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
     "http-errors": "~1.6.3",
-    "jade": "~1.11.0",
+    "luxon": "^3.3.0",
+    "mongoose": "^7.1.0",
     "morgan": "~1.9.1"
+  },
+  "devDependencies": {
+    "envalid": "^7.3.1",
+    "nodemon": "^2.0.22"
   }
 }
