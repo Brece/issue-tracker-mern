@@ -15,3 +15,47 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+h1 {
+  font-size: 32px;
+  font-weight: bold;
+}
+
+h2 {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+h3 {
+  font-size: 21px;
+  font-weight: bold;
+}
+
+h4 {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.primary-bg-color {
+  background-color: #dc254f;
+}
+
+.secondary-bg-color {
+  background-color: #0f2d4a;
+}
+
+.status-onhold {
+  background-color: #febcd2;
+}
+
+.status-inprogress {
+  background-color: #fcffbd;
+}
+
+.status-done {
+  background-color: #c2fed9;
+}
+
+.status-todo {
+  background-color: #bde0ff;
+}

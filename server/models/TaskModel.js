@@ -5,29 +5,25 @@ const TaskSchema = new Schema({
         title: { 
             type: String, 
             required: true, 
-            maxLength: 100 
+            maxLength: 100,
         },
         text: { 
             type: String, 
             required: true, 
-            maxLength: 500 
+            maxLength: 500,
         },
         status: {
             type: String,
-            default: 'TODO',
-            enum: [
-                'TODO',
-                'INPROGRESS',
-                'DONE',
-                'ONHOLD'
-            ],
+            enum: ['TODO', 'INPROGRESS', 'DONE', 'ONHOLD'],
+            default: 'INPROGRESS',
         },
         assigned: {
             type: Boolean,
+            default: false,
         },
         userId: { 
             type: Schema.Types.ObjectId, 
-            ref: 'User'
+            ref: 'User',
         }
     },
     {

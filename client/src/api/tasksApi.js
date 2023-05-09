@@ -1,8 +1,8 @@
-import { fetchData } from './helper_api';
+import { fetchData } from './helperApi';
 
 export async function fetchTasks() {
     const response = await fetchData('/api/tasks', { method: 'GET' });
-
+    
     return response.json();
 }
 

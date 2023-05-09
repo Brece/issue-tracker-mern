@@ -43,8 +43,8 @@ export const createUser = async (req, res, next) => {
         }
 
         const newUser = await UserModel.create({
-            firstname: firstname,
-            lastname: lastname,
+            firstname,
+            lastname
         })
         res.status(201).json(newUser);
     } catch (error) {

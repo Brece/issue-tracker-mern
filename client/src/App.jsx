@@ -9,8 +9,8 @@ function App() {
   return (
     <>
       <Router>
+        <div className='my-0 mx-3 md:mx-6 lg:w-[1000px] lg:mx-auto'>
         <Header />
-        <div className='o-wrap'>
           <Routes>
             <Route path='/' element={<Home />} />
             <Route path='/tasks/:id' element={<Task />} />

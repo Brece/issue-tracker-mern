@@ -1,4 +1,4 @@
-import { fetchData } from './helper_api';
+import { fetchData } from './helperApi';
 
 export async function fetchUsers() {
     const response = await fetchData('/api/users', { method: 'GET' });

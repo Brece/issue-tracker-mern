@@ -6,6 +6,7 @@ export const getTasks = async (req, res, next) => {
     try {
         const tasks = await TaskModel.find()
             .sort({ 'updatedAt': 'descending' })
+            .populate('userId')
             .exec();
         res.status(200).json(tasks);
     } catch (error) {
@@ -21,7 +22,9 @@ export const getTask = async (req, res, next) => {
             throw createHttpError(400, 'Invalid task ID');
         }
 
-        const task = await TaskModel.findById(taskId).exec();
+        const task = await TaskModel.findById(taskId)
+            .populate('userId')
+            .exec();
 
         if (!task) {
             throw createHttpError(404, 'Task not found');
@@ -36,6 +39,9 @@ export const getTask = async (req, res, next) => {
 export const createTask = async (req, res, next) => {
     const title = req.body.title;
     const text = req.body.text;
+    const status = req.body.status;
+    const assigned = req.body.assigned;
+    const userId = req.body.userId;
 
     try {
         if (!title || !text) {
@@ -43,8 +49,11 @@ export const createTask = async (req, res, next) => {
         }
 
         const newTask = await TaskModel.create({
-            title: title,
-            text: text,
+            title,
+            text,
+            status,
+            assigned,
+            userId
         });
         res.status(201).json(newTask);
     } catch (error) {
