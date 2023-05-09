@@ -16,14 +16,29 @@ function Home() {
 
     // TODO: filter option and selected user update filteredTask
     const [selectedUser, setSelectedUser] = useState('');
-    const [filterOption, setFilterOption] = useState('');
+    const [filterOption, setFilterOption] = useState('ALL');
 
     const handleFilterOption = (option) => {
-        const updatedTasks = tasks.filter((task) => task.status === option);
+        // TODO: use case switch for 'all', 'unassigned' and rest
         setFilterOption(option);
-        setFilteredTasks(updatedTasks);
+        let updatedTasks = [];
+
+        switch (option) {
+            case 'ALL':
+                setFilteredTasks(tasks);
+                break;
+            case 'UNASSIGNED':
+                updatedTasks = tasks.filter((task) => task.assigned === false)
+                setFilteredTasks(updatedTasks);
+                break;
+            default:
+                updatedTasks = tasks.filter((task) => task.status === option)
+                setFilteredTasks(updatedTasks);
+                break;
+        }
     }
 
+    // TODO: test with assigned tasks
     const handleSelectedUser = (userId) => {
         const updatedTasks = tasks.filter((task) => task.userId === userId);
         setSelectedUser(userId);
@@ -49,6 +64,7 @@ function Home() {
 
                 setUsers(users);
                 setTasks(tasks);
+                setFilteredTasks(tasks);
             } catch (error) {
                 console.log(error);
                 setShowLoadingError(true);
@@ -73,11 +89,9 @@ function Home() {
                     ))}
                 </div>
                 <div className='w-full md:flex-1'>
-                    <div>
-                        <FilterOptions />
-                    </div>
+                    <FilterOptions filterOption={ filterOption } handleFilterOption={ handleFilterOption } />
                     <div className='h-[60vh] md:h-screen overflow-y-auto'>
-                        {tasks.map(( task ) => (
+                        {filteredTasks.map(( task ) => (
                             <Task task={ task } key={ task._id } />
                             ))}
                     </div>
