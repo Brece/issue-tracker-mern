@@ -1,13 +1,13 @@
 # Issue Tracker (Fullstack MongoDB, Express, React, Node)
 This is a CRUD application that tracks tasks and manage the assigned users.
 
-![Project Preview](/client/src/assets/Screenshot%202023-05-10%20at%2009-38-49%20Issue%20Tracker.png)
+![Project Preview](/client/src/assets/Screenshot%202023-05-10%20at%2015-35-34%20Issue%20Tracker.png)
 
 DISCLAIMER:
 *This is still work in progress.*
 Todos:
 
-    - I am currently working on the task section of the frontend.
+    - display validation errors correctly
     - how to write a script to retore the database from a file which have a collection referencing another collection
 
 ## How to run

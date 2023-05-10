@@ -40,7 +40,6 @@ export const createTask = async (req, res, next) => {
     const title = req.body.title;
     const text = req.body.text;
     const status = req.body.status;
-    const assigned = req.body.assigned;
     const userId = req.body.userId;
 
     try {
@@ -48,12 +47,12 @@ export const createTask = async (req, res, next) => {
             throw createHttpError(400, 'Task must have a title and a description');
         }
 
+        // frontend form sets userId to an empty string if the task gets unassigned
         const newTask = await TaskModel.create({
             title,
             text,
             status,
-            assigned,
-            userId
+            userId: userId === '' ? null : userId
         });
         res.status(201).json(newTask);
     } catch (error) {
@@ -65,6 +64,8 @@ export const updateTask = async (req, res, next) => {
     const taskId = req.params.taskId;
     const newTitle = req.body.title;
     const newText = req.body.text;
+    const newStatus = req.body.status;
+    const newUserId = req.body.userId;
 
     try {
         if (!mongoose.isValidObjectId(taskId)) {
@@ -83,6 +84,10 @@ export const updateTask = async (req, res, next) => {
 
         task.title = newTitle;
         task.text = newText;
+        task.status = newStatus;
+
+        // frontend form sets userId to an empty string if the task gets unassigned
+        task.userId = newUserId === '' ? null : newUserId;
 
         const updatedTask = await task.save();
         res.status(200).json(updatedTask);

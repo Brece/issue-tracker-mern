@@ -15,11 +15,7 @@ const TaskSchema = new Schema({
         status: {
             type: String,
             enum: ['TODO', 'INPROGRESS', 'DONE', 'ONHOLD'],
-            default: 'INPROGRESS',
-        },
-        assigned: {
-            type: Boolean,
-            default: false,
+            default: 'TODO',
         },
         userId: { 
             type: Schema.Types.ObjectId, 

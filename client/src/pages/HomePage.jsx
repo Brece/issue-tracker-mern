@@ -6,16 +6,19 @@ import User from '../components/User';
 import Button from '../components/Button';
 import FilterOptions from '../components/FilterOptions';
 import AddUserModal from '../components/AddUserModal';
+import AddTaskModal from '../components/AddTaskModal';
 
 function Home() {
     const [tasks, setTasks] = useState([]);
     const [users, setUsers] = useState([]);
     const [filteredTasks, setFilteredTasks] = useState([]);
 
+    // TODO: add placeholder while fetching data
     const [isLoading, setIsLoading] = useState(true);
     const [showLoadingError, setShowLoadingError] = useState(false);
 
     const [userToEdit, setUserToEdit] = useState(null);
+    const [taskToEdit, setTaskToEdit] = useState(null);
 
     const [showAddUserModal, setShowAddUserModal] = useState(false);
     const [showAddTaskModal, setShowAddTaskModal] = useState(false);
@@ -33,7 +36,7 @@ function Home() {
                 setFilteredTasks(tasks);
                 break;
             case 'UNASSIGNED':
-                updatedTasks = tasks.filter((task) => task.assigned === false)
+                updatedTasks = tasks.filter((task) => task.userId === null)
                 setFilteredTasks(updatedTasks);
                 break;
             default:
@@ -50,11 +53,47 @@ function Home() {
         setFilteredTasks(updatedTasks);
     }
 
+    const addUser = (newUser) => {
+        setUsers([...users, newUser]);
+        setShowAddUserModal(false);
+    }
+
+    const editUser = (updatedUser) => {
+        setUsers(users.map((existingUser) => existingUser._id === updatedUser._id ? updatedUser : existingUser));
+        setUserToEdit(null);
+    }
+
     const deleteUser = async (user) => {
         try {
             await UsersApi.deleteUser(user._id);
             const updatedUsers = users.filter((existingUser) => existingUser._id !== user._id);
             setUsers(updatedUsers);
+        } catch (error) {
+            console.error(error);
+            alert(error);
+        }
+    }
+
+    const addTask = (newTask) => {
+        const updatedTasks = [...tasks, newTask];
+        setTasks(updatedTasks);
+        setFilteredTasks(updatedTasks);
+        setShowAddTaskModal(false);
+    }
+
+    const editTask = (updatedTask) => {
+        const updatedTasks = tasks.map((existingTask) => existingTask._id === updatedTask._id ? updatedTask : existingTask);
+        setTasks(updatedTasks);
+        setFilteredTasks(updatedTasks);
+        setTaskToEdit(null);
+    }
+
+    const deleteTask = async (task) => {
+        try {
+            await TasksApi.deleteTask(task._id);
+            const updatedTasks = tasks.filter((existingTask) => existingTask._id !== task._id);
+            setTasks(updatedTasks);
+            setFilteredTasks(updatedTasks);
         } catch (error) {
             console.error(error);
             alert(error);
@@ -96,28 +135,34 @@ function Home() {
                         <User
                             user={ user }
                             key={ user._id }
-                            onUserClicked={ setUserToEdit }
+                            onEditUserClicked={ setUserToEdit }
                             onDeleteUserClicked={ deleteUser }
                         />
                     ))}
                 </div>
+
+                {/* passing down the users list because after an edit (re-assign task) the assigned userId becomes an ID "string" instead of an object in the frontend, with the list we can filter for the correct name to display instead of getting "undefined". A more zentralized way to handle state would be a better approach */}
                 <div className='w-full md:flex-1'>
                     <FilterOptions filterOption={ filterOption } handleFilterOption={ handleFilterOption } />
                     <div className='h-[60vh] md:h-screen overflow-y-auto'>
                         {filteredTasks.map(( task ) => (
-                            <Task task={ task } key={ task._id } />
+                            <Task
+                                task={ task }
+                                users={ users }
+                                key={ task._id }
+                                onEditTaskClicked={ setTaskToEdit }
+                                onDeleteTaskClicked={ deleteTask }
+                            />
                             ))}
                     </div>
                 </div>
             </div>
 
+            {/* re-useable User modal for adding and updating */}
             { showAddUserModal && (
                 <AddUserModal
                     onDismiss={ () => setShowAddUserModal(false) }
-                    onUserSaved={ (newUser) => {
-                        setUsers([...users, newUser]);
-                        setShowAddUserModal(false);
-                    }}
+                    onUserSaved={ addUser }
                 />
             )}
 
@@ -125,12 +170,27 @@ function Home() {
                 <AddUserModal
                     userToEdit={ userToEdit }
                     onDismiss={ () => setUserToEdit(null) }
-                    onUserSaved={ (updatedUser) => {
-                        setUsers(users.map((existingUser) => existingUser._id === updatedUser._id ? updatedUser : existingUser));
-                        setUserToEdit(null);
-                    }}
+                    onUserSaved={ editUser }
                 />
             )}
+
+            {/* re-useable Task modal for adding and updating */}
+            { showAddTaskModal && 
+                <AddTaskModal
+                    users={ users }
+                    onDismiss={ () => setShowAddTaskModal(null) }
+                    onTaskSaved={ addTask }
+                />
+            }
+
+            { taskToEdit && 
+                <AddTaskModal
+                    users={ users }
+                    taskToEdit={ taskToEdit }
+                    onDismiss={ () => setTaskToEdit(null) }
+                    onTaskSaved={ editTask }
+                />
+            }
         </div>
     );
 }

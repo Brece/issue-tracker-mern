@@ -11,6 +11,8 @@ router.post('/', TasksController.createTask);
 
 router.patch('/:taskId', TasksController.updateTask);
 
+router.delete('/', TasksController.deleteTasks);
+
 router.delete('/:taskId', TasksController.deleteTask);
 
 export default router;

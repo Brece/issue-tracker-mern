@@ -1,18 +1,31 @@
 import { BiPencil } from 'react-icons/bi';
-import { Link } from 'react-router-dom';
+import { FiTrash } from 'react-icons/fi';
 import { DateTime } from 'luxon';
 
-function Task({ task }) {
+function Task({
+    task,
+    users,
+    onEditTaskClicked,
+    onDeleteTaskClicked,
+}) {
     const {
         title,
         text,
         status,
-        assigned,
         userId,
-        _id,
         createdAt,
         updatedAt,
     } = task;
+
+    // type check neccessary after an edit, userId object comes back as a string in the response body
+    // on a fresh request the userId is an object
+    const getUserName = (reference) => {
+        if (typeof reference === 'string') {
+            const assignedUser = users.find((user) => user._id === reference);
+            return assignedUser ? `${ assignedUser.firstname } ${ assignedUser.lastname }` : 'Unassigned';
+        }
+        return `${ reference.firstname } ${ reference.lastname }`;
+    }
 
     return (
         <div className={`status-${ status.toLowerCase() } my-3 py-2 px-3 border border-secondary rounded-md`}>
@@ -22,18 +35,27 @@ function Task({ task }) {
                 </h3>
                 <div className='text-end'>
                     <p>{ status }</p>
-                    <p className={`text-sm ${ assigned ? 'text-secondary' : 'text-primary' }`}>
-                        { assigned ? `${ userId?.firstname } ${ userId?.lastname }` : 'Unassigned'}
+                    <p className={`text-sm ${ userId ? 'text-secondary' : 'text-primary' }`}>
+                        { userId ? getUserName(userId) : 'Unassigned'}
                     </p>
                 </div>
             </div>
             <p className='mb-1'>{ text }</p>
             <div className='flex flex-row justify-between items-center'>
-                <button className='py-1 px-3 bg-white text-primary rounded-md'>
-                    <Link to={`/tasks/${ _id }`}>
+                <div className='flex flex-row'>
+                    <button
+                        className='py-1 px-3 bg-white text-primary rounded-md mr-1'
+                        onClick={ () => onEditTaskClicked(task) }
+                    >
                         <BiPencil size={20} />
-                    </Link>
-                </button>
+                    </button>
+                    <button
+                        className='py-1 px-3 bg-white text-primary rounded-md'
+                        onClick={ () => onDeleteTaskClicked(task) }
+                    >
+                        <FiTrash size={20} />
+                    </button>
+                </div>
                 <div className='flex flex-col items-end text-xs text-neutral-500'>
                     <p>Create on { DateTime.fromJSDate(new Date(createdAt)).toLocaleString(DateTime.DATETIME_MED_WITH_SECONDS) }</p>
                     <p>Updated on { DateTime.fromJSDate(new Date(updatedAt)).toLocaleString(DateTime.DATETIME_MED_WITH_SECONDS) }</p>

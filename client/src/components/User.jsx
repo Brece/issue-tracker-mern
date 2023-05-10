@@ -3,7 +3,7 @@ import { FiTrash } from 'react-icons/fi';
 
 function User({
     user,
-    onUserClicked,
+    onEditUserClicked,
     onDeleteUserClicked,
 }) {
     const {
@@ -18,7 +18,7 @@ function User({
             <div className='flex flex-row'>
                 <button
                     className='py-1 px-3 bg-white text-primary rounded-md mr-1'
-                    onClick={ () => onUserClicked(user) }
+                    onClick={ () => onEditUserClicked(user) }
                 >
                     <BiPencil size={20} />
                 </button>
