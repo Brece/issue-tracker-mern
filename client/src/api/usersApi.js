@@ -13,7 +13,6 @@ export async function fetchUser(userId) {
 }
 
 export async function createUser(user) {
-    console.log('user', user);
     const response = await fetchData('/api/users',
     {
         method: 'POST',
@@ -22,7 +21,6 @@ export async function createUser(user) {
         },
         body: JSON.stringify(user),
     });
-console.log('response', response);
     return response.json();
 }
 

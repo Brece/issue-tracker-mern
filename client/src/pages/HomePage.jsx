@@ -91,7 +91,7 @@ function Home() {
                 <Button onClick={() => setShowAddTaskModal(true)} label='Add Task' backgroundColor='secondary-bg-color' />
             </div>
             <div className='flex flex-col md:flex-row'>
-                <div className='w-full h-[30vh] md:h-screen overflow-y-auto md:w-72 md:pr-6'>
+                <div className='w-full h-[30vh] md:h-screen overflow-y-auto md:w-[350px] mb-8 md:mb-0 md:pr-6'>
                     {users.map(( user ) => (
                         <User
                             user={ user }

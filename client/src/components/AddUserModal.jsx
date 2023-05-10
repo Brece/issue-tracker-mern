@@ -26,12 +26,12 @@ function AddUserModal({
         try {
             let userResponse;
 
+            // re-use AddUserModal for add and update
             if (userToEdit) {
                 userResponse = await UsersApi.updateUser(userToEdit._id, input);
             } else {
                 userResponse = await UsersApi.createUser(input);
             }
-console.log(userResponse);
             onUserSaved(userResponse);
         } catch (error) {
             console.error(error);
@@ -43,7 +43,7 @@ console.log(userResponse);
         <div className='absolute z-10 left-0 right-0 top-0 bottom-0'>
             <div className='w-full h-full bg-neutral-200 opacity-70'></div>
 
-            <div className='absolute z-20 left-2/4 top-2/4 -translate-y-2/4 -translate-x-2/4 md:w-[500px] py-3 px-3 rounded-md border bg-white'>
+            <div className='absolute z-20 left-2/4 top-2/4 -translate-y-2/4 -translate-x-2/4 w-5/6  md:w-[500px] py-3 px-3 rounded-md border bg-white'>
                 <div className='flex flex-row justify-between mb-9'>
                     <h2>
                         { userToEdit ? 'Edit User' : 'Add User' }
