@@ -5,6 +5,7 @@ import Task from '../components/Task';
 import User from '../components/User';
 import Button from '../components/Button';
 import FilterOptions from '../components/FilterOptions';
+import AddUserModal from '../components/AddUserModal';
 
 function Home() {
     const [tasks, setTasks] = useState([]);
@@ -14,12 +15,16 @@ function Home() {
     const [isLoading, setIsLoading] = useState(true);
     const [showLoadingError, setShowLoadingError] = useState(false);
 
+    const [userToEdit, setUserToEdit] = useState(null);
+
+    const [showAddUserModal, setShowAddUserModal] = useState(false);
+    const [showAddTaskModal, setShowAddTaskModal] = useState(false);
+
     // TODO: filter option and selected user update filteredTask
     const [selectedUser, setSelectedUser] = useState('');
     const [filterOption, setFilterOption] = useState('ALL');
 
     const handleFilterOption = (option) => {
-        // TODO: use case switch for 'all', 'unassigned' and rest
         setFilterOption(option);
         let updatedTasks = [];
 
@@ -45,16 +50,19 @@ function Home() {
         setFilteredTasks(updatedTasks);
     }
 
-    const toggleAddUserModal = () => {
-
-    }
-
-    const toggleAddTaskModal = () => {
-
+    const deleteUser = async (user) => {
+        try {
+            await UsersApi.deleteUser(user._id);
+            const updatedUsers = users.filter((existingUser) => existingUser._id !== user._id);
+            setUsers(updatedUsers);
+        } catch (error) {
+            console.error(error);
+            alert(error);
+        }
     }
 
     useEffect(() => {
-        async function fetchData() {
+        const fetchData = async () => {
             try {
                 setShowLoadingError(false);
                 setIsLoading(true);
@@ -79,13 +87,18 @@ function Home() {
     return (
         <div>
             <div className='w-full mb-5'>
-                <Button onClick={() => toggleAddUserModal()} label='Add User' backgroundColor='secondary-bg-color' />
-                <Button onClick={() => toggleAddTaskModal()} label='Add Task' backgroundColor='secondary-bg-color' />
+                <Button onClick={() => setShowAddUserModal(true)} label='Add User' backgroundColor='secondary-bg-color' />
+                <Button onClick={() => setShowAddTaskModal(true)} label='Add Task' backgroundColor='secondary-bg-color' />
             </div>
             <div className='flex flex-col md:flex-row'>
                 <div className='w-full h-[30vh] md:h-screen overflow-y-auto md:w-72 md:pr-6'>
                     {users.map(( user ) => (
-                        <User user={ user } key={ user._id } />
+                        <User
+                            user={ user }
+                            key={ user._id }
+                            onUserClicked={ setUserToEdit }
+                            onDeleteUserClicked={ deleteUser }
+                        />
                     ))}
                 </div>
                 <div className='w-full md:flex-1'>
@@ -97,6 +110,27 @@ function Home() {
                     </div>
                 </div>
             </div>
+
+            { showAddUserModal && (
+                <AddUserModal
+                    onDismiss={ () => setShowAddUserModal(false) }
+                    onUserSaved={ (newUser) => {
+                        setUsers([...users, newUser]);
+                        setShowAddUserModal(false);
+                    }}
+                />
+            )}
+
+            { userToEdit && (
+                <AddUserModal
+                    userToEdit={ userToEdit }
+                    onDismiss={ () => setUserToEdit(null) }
+                    onUserSaved={ (updatedUser) => {
+                        setUsers(users.map((existingUser) => existingUser._id === updatedUser._id ? updatedUser : existingUser));
+                        setUserToEdit(null);
+                    }}
+                />
+            )}
         </div>
     );
 }

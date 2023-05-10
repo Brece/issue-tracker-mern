@@ -1,6 +1,6 @@
 function FilterOptions(props) {
     return (
-        <div className='w-full flex flex-row items-center font-semibold text-s text-secondary'>
+        <div className='w-full flex flex-row items-center mb-4 font-semibold text-s text-secondary'>
             <p 
                 className={`${ props.filterOption ==='ALL' ? 'text-primary' : ''} hover:text-primary cursor-pointer mr-2 sm:mr-3`}
                 onClick={() => props.handleFilterOption('ALL')}

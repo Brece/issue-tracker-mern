@@ -1,20 +1,18 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Header from './components/Header';
-import NotFound from './pages/NotFound';
-import Home from './pages/Home';
-import Task from './pages/Task';
-import User from './pages/User';
+import NotFound from './pages/NotFoundPage';
+import Home from './pages/HomePage';
+import Task from './pages/TaskPage';
 
 function App() {
   return (
     <>
       <Router>
-        <div className='mt-6 mx-3 md:mx-6 lg:w-[1000px] lg:mx-auto'>
+        <div className='mt-6 mx-3 md:mx-6 lg:w-[1000px] lg:mx-auto relative'>
         <Header />
           <Routes>
             <Route path='/' element={<Home />} />
             <Route path='/tasks/:id' element={<Task />} />
-            <Route path='/users/:id' element={<User />} />
             <Route path='*' element={<NotFound />} />
           </Routes>
         </div>

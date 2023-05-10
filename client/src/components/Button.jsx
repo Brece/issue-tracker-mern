@@ -1,7 +1,11 @@
-function Button(props) {
+function Button({
+    onClick,
+    backgroundColor,
+    label,
+}) {
     return (
-        <button className={`${props.backgroundColor} mr-3 py-2 px-3 text-center text-white font-semibold rounded-md`}>
-            { props.label }
+        <button onClick={ onClick } className={`${backgroundColor} btn`}>
+            { label }
         </button>
     );
 }
