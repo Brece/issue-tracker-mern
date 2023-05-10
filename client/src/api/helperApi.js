@@ -9,3 +9,12 @@ export async function fetchData(input, init) {
         throw Error(errorMessage);
     }
 }
+
+// using normal fetch function because we don't want anything returned, the HomePage component refreshes the page after restoring
+export async function restoreData() {
+    try {
+        await fetch('/api/restore', { method: 'GET' });
+    } catch (error) {
+        throw Error(error)
+    }
+}

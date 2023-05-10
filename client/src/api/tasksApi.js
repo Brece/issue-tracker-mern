@@ -13,7 +13,6 @@ export async function fetchTask(taskId) {
 }
 
 export async function createTask(task) {
-    console.log('task', task);
     const response = await fetchData('/api/tasks',
     {
         method: 'POST',
@@ -22,7 +21,6 @@ export async function createTask(task) {
         },
         body: JSON.stringify(task),
     });
-    console.log(response);
     return response.json();
 }
 

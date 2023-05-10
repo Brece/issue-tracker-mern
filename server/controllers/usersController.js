@@ -112,12 +112,3 @@ export const deleteUsers = async (req, res, next) => {
         next(error);
     }
 }
-
-// TODO:
-export const restoreUsers = async (req, res, next) => {
-    try {
-        
-    } catch (error) {
-        next(error);
-    }
-}

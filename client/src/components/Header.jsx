@@ -4,11 +4,11 @@ import logo from '../assets/IT-logo/cover.png';
 function Header () {
     return (
         <div className='mb-5'>
-            <Link to='/'>
-                <div className='bg-green-200 w-[150px] cursor-pointer'>
-                    <img alt='Issue Tracker logo' src={ logo }/>
+                <div className='bg-green-200 w-[150px]'>
+                    <Link to='/'>
+                        <img alt='Issue Tracker logo' src={ logo }/>
+                    </Link>
                 </div>
-            </Link>
         </div>
     );
 }

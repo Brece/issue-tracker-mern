@@ -126,12 +126,3 @@ export const deleteTasks = async (req, res, next) => {
         next(error);
     }
 }
-
-// TODO:
-export const restoreTasks = async (req, res, next) => {
-    try {
-        
-    } catch (error) {
-        next(error);
-    }
-}

@@ -1,17 +1,22 @@
 import { useEffect, useState } from 'react';
 import * as TasksApi from '../api/tasksApi';
 import * as UsersApi from '../api/usersApi';
+import { restoreData  } from '../api/helperApi';
 import Task from '../components/Task';
 import User from '../components/User';
 import Button from '../components/Button';
 import FilterOptions from '../components/FilterOptions';
 import AddUserModal from '../components/AddUserModal';
 import AddTaskModal from '../components/AddTaskModal';
+import { redirect, useNavigate } from 'react-router-dom';
 
 function Home() {
     const [tasks, setTasks] = useState([]);
     const [users, setUsers] = useState([]);
     const [filteredTasks, setFilteredTasks] = useState([]);
+
+    // useNavigate for page refresh after restoring data
+    const navigate = useNavigate();
 
     // TODO: add placeholder while fetching data
     const [isLoading, setIsLoading] = useState(true);
@@ -100,6 +105,16 @@ function Home() {
         }
     }
 
+    const restoreDocuments = async () => {
+        try {
+            await restoreData();
+            navigate(0);
+        } catch (error) {
+            console.log(error);
+            alert(error);
+        }
+    }
+
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -126,8 +141,9 @@ function Home() {
     return (
         <div>
             <div className='w-full mb-5'>
-                <Button onClick={() => setShowAddUserModal(true)} label='Add User' backgroundColor='secondary-bg-color' />
-                <Button onClick={() => setShowAddTaskModal(true)} label='Add Task' backgroundColor='secondary-bg-color' />
+                <Button onClick={ () => setShowAddUserModal(true) } label='Add User' backgroundColor='secondary-bg-color' />
+                <Button onClick={ () => setShowAddTaskModal(true) } label='Add Task' backgroundColor='secondary-bg-color' />
+                <Button onClick={ () => restoreDocuments() } label='Restore Data' backgroundColor='primary-bg-color' />
             </div>
             <div className='flex flex-col md:flex-row'>
                 <div className='w-full h-[30vh] md:h-screen overflow-y-auto md:w-[350px] mb-8 md:mb-0 md:pr-6'>
